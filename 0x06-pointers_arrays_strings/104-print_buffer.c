@@ -1,47 +1,55 @@
-#include "main.h"
 #include <stdio.h>
 
 /**
- * * print_buffer - print a buffer
- *  * @b: the buffer to print
- *   * @size: the number of bytes to print
- *    * Description: This function prints the content of of size bytes of the
- *     * buffer pointed to by b. 10 bytes are printed per line, with each line
- *      * prefixed with the position of the first byte, starting at 0. Each line
- *       * shows the heaxadecimal content of the buffer 2 bytes at a time, with
- *        * each pair separated by a space, followed by the content of the buffer
- *         * with non-printable characters shown as a `.'.
- *          * Return: void
+ * print_buffer - print a buffer 10 bytes at a time, displaying the line
+ * number in hex and byte pairs in hex
+ *
+ * @b: string to print from
+ * @size: size of buffer
+ *
+ * Return: void
  */
-
 void print_buffer(char *b, int size)
 {
-	int b_pos;
+	int i, counter = 0, size2 = size;
 
-	int l_pos;
+	char *ptr = b;
 
-	for (b_pos = 0; b_pos < size; b_pos += 10)
+	if (size == 0)
+		printf("\n");
+
+	while (size > 0)
 	{
-		printf("%08x: ", b_pos);
-		for (l_pos = 0; l_pos < 10; ++l_pos)
+		printf("%08x:", counter);
+		i = 0;
+		while (size > 0 && i < 10)
 		{
-			if (b_pos + l_pos < size)
-				printf("%02x", b[b_pos + l_pos]);
-			else
-				printf("  ");
-			if (l_pos % 2)
-				putchar(' ');
+			if (!(i % 2))
+				printf(" ");
+			printf("%02x", *ptr++);
+			i++;
+			size--;
+			counter++;
 		}
-		for (l_pos = 0; l_pos < 10 && b_pos + l_pos < size; ++l_pos)
+		while (counter % 10 != 0)
 		{
-			if (b[b_pos + l_pos] < 32 || b[b_pos + l_pos] > 126)
-				putchar('.');
-			else
-				putchar(b[b_pos + l_pos]);
+			if (!(counter % 2))
+				printf(" ");
+			printf("  ");
+			counter++;
 		}
-		if (b_pos + l_pos < size)
-			putchar('\n');
+		printf(" ");
+		i = 0;
+		while (size2 > 0 && i < 10)
+		{
+			if (*b > 31 && *b != 127)
+				printf("%c", *b);
+			else
+				printf(".");
+		size2--;
+		i++;
+		b++;
+		}
+		printf("\n");
 	}
-	putchar('\n');
 }
-
